@@ -233,32 +233,6 @@ out/KERNEL_OBJ/initramfs.recovery-gz:
 		cp /usr/lib/$(DEB_HOST_MULTIARCH)/halium-generic-initramfs/recovery-initramfs.img-halium-generic $@; \
 	fi
 
-out/KERNEL_OBJ/initramfs.lz4:
-	OVERLAY_DIR="$(CURDIR)/debian/initramfs-overlay"; \
-	if [ -e "$${OVERLAY_DIR}" ]; then \
-		tmpdir=$$(mktemp -d); \
-		cd $${tmpdir}; \
-		lz4 -c -d /usr/lib/$(DEB_HOST_MULTIARCH)/halium-generic-initramfs/initrd.img-halium-generic.lz4 | cpio -i; \
-		cp -Rv $${OVERLAY_DIR}/* .; \
-		find . | cpio -o -R 0:0 -H newc | lz4 -9 -l > $(BASEDIR)/$@; \
-	else \
-		cp /usr/lib/$(DEB_HOST_MULTIARCH)/halium-generic-initramfs/initrd.img-halium-generic.lz4 $@; \
-	fi
-
-out/KERNEL_OBJ/initramfs.recovery-lz4:
-	OVERLAY_DIR="$(CURDIR)/debian/initramfs-overlay"; \
-	RECOVERY_OVERLAY_DIR="$(CURDIR)/debian/recovery-initramfs-overlay"; \
-	if [ -e "$${OVERLAY_DIR}" ] || [ -e "$${RECOVERY_OVERLAY_DIR}" ]; then \
-		tmpdir=$$(mktemp -d); \
-		cd $${tmpdir}; \
-		lz4 -c -d /usr/lib/$(DEB_HOST_MULTIARCH)/halium-generic-initramfs/recovery-initramfs.img-halium-generic.lz4 | cpio -i;\
-		[ -e "$${OVERLAY_DIR}" ] && cp -Rv $${OVERLAY_DIR}/* .; \
-		[ -e "$${RECOVERY_OVERLAY_DIR}" ] && cp -Rv $${RECOVERY_OVERLAY_DIR}/* .; \
-		find . | cpio -o -R 0:0 -H newc | lz4 -9 -l > $(BASEDIR)/$@; \
-	else \
-		cp /usr/lib/$(DEB_HOST_MULTIARCH)/halium-generic-initramfs/recovery-initramfs.img-halium-generic.lz4 $@; \
-	fi
-
 out/KERNEL_OBJ/initramfs.default: out/KERNEL_OBJ/initramfs.$(KERNEL_INITRAMFS_COMPRESSION)
 	cp out/KERNEL_OBJ/initramfs.$(KERNEL_INITRAMFS_COMPRESSION) $@
 
