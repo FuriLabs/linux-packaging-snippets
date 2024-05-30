@@ -219,28 +219,8 @@ out/KERNEL_OBJ/initramfs.gz:
 		cp /usr/lib/$(DEB_HOST_MULTIARCH)/halium-generic-initramfs/initrd.img-halium-generic $@; \
 	fi
 
-out/KERNEL_OBJ/initramfs.recovery-gz:
-	OVERLAY_DIR="$(CURDIR)/debian/initramfs-overlay"; \
-	RECOVERY_OVERLAY_DIR="$(CURDIR)/debian/recovery-initramfs-overlay"; \
-	if [ -e "$${OVERLAY_DIR}" ] || [ -e "$${RECOVERY_OVERLAY_DIR}" ]; then \
-		tmpdir=$$(mktemp -d); \
-		cd $${tmpdir}; \
-		gunzip -c /usr/lib/$(DEB_HOST_MULTIARCH)/halium-generic-initramfs/recovery-initramfs.img-halium-generic | cpio -i;\
-		[ -e "$${OVERLAY_DIR}" ] && cp -Rv $${OVERLAY_DIR}/* .; \
-		[ -e "$${RECOVERY_OVERLAY_DIR}" ] && cp -Rv $${RECOVERY_OVERLAY_DIR}/* .; \
-		find . | cpio -o -R 0:0 -H newc | gzip > $(BASEDIR)/$@; \
-	else \
-		cp /usr/lib/$(DEB_HOST_MULTIARCH)/halium-generic-initramfs/recovery-initramfs.img-halium-generic $@; \
-	fi
-
 out/KERNEL_OBJ/initramfs.default: out/KERNEL_OBJ/initramfs.$(KERNEL_INITRAMFS_COMPRESSION)
 	cp out/KERNEL_OBJ/initramfs.$(KERNEL_INITRAMFS_COMPRESSION) $@
-
-out/KERNEL_OBJ/initramfs.recovery-default: out/KERNEL_OBJ/initramfs.recovery-$(KERNEL_INITRAMFS_COMPRESSION)
-	cp out/KERNEL_OBJ/initramfs.recovery-$(KERNEL_INITRAMFS_COMPRESSION) $@
-
-out/KERNEL_OBJ/target-dtb.recovery-%: out/KERNEL_OBJ/target-dtb.%
-	cp -v $< $@
 
 out/KERNEL_OBJ/boot-%.img: out/KERNEL_OBJ/initramfs.% out/KERNEL_OBJ/target-dtb.%
 	KERNEL_IMAGE_TYPE="$$(echo $* | sed -s 's|recovery-||')"; \
@@ -281,12 +261,9 @@ out/KERNEL_OBJ/boot-%.img: out/KERNEL_OBJ/initramfs.% out/KERNEL_OBJ/target-dtb.
 out/KERNEL_OBJ/boot.img: out/KERNEL_OBJ/boot-default.img
 	cp -v $< $@
 
-out/KERNEL_OBJ/recovery.img: out/KERNEL_OBJ/boot-recovery-default.img
-	cp -v $< $@
-
 override_dh_auto_configure: debian/control out/KERNEL_OBJ/.config path-override-prepare
 
-override_dh_auto_build: out/KERNEL_OBJ/target-dtb.default out/KERNEL_OBJ/boot.img out/KERNEL_OBJ/recovery.img out/KERNEL_OBJ/dtbo.img out/KERNEL_OBJ/vbmeta.img out/modules-stamp out/dtb-stamp
+override_dh_auto_build: out/KERNEL_OBJ/target-dtb.default out/KERNEL_OBJ/boot.img out/KERNEL_OBJ/dtbo.img out/KERNEL_OBJ/vbmeta.img out/modules-stamp out/dtb-stamp
 
 kernel_snippet_install:
 	mkdir -p $(CURDIR)/debian/linux-image-$(KERNEL_RELEASE)/boot
@@ -304,7 +281,6 @@ endif
 
 	mkdir -p $(CURDIR)/debian/linux-bootimage-$(KERNEL_RELEASE)/boot
 	cp -v $(KERNEL_OUT)/boot.img $(CURDIR)/debian/linux-bootimage-$(KERNEL_RELEASE)/boot/boot.img-$(KERNEL_RELEASE)
-	cp -v $(KERNEL_OUT)/recovery.img $(CURDIR)/debian/linux-bootimage-$(KERNEL_RELEASE)/boot/recovery.img-$(KERNEL_RELEASE)
 ifeq ($(KERNEL_IMAGE_WITH_DTB_OVERLAY),1)
 	cp -v $(KERNEL_OUT)/dtbo.img $(CURDIR)/debian/linux-bootimage-$(KERNEL_RELEASE)/boot/dtbo.img-$(KERNEL_RELEASE)
 endif
