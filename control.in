@@ -1,4 +1,4 @@
-Source: linux-@VARIANT@-@DEVICE_VENDOR@-@DEVICE_MODEL@
+Source: linux-@DEVICE_VENDOR@-@DEVICE_MODEL@
 Section: kernel
 Priority: optional
 Maintainer: Bardia Moshiri <fakeshell@bardia.tech>
@@ -26,8 +26,8 @@ Build-Depends: build-essential,
                lz4,
                @DEB_TOOLCHAIN@
 Standards-Version: 4.5.0.3
-Vcs-Browser: https://github.com/furilabs/linux-@VARIANT@-@DEVICE_VENDOR@-@DEVICE_MODEL@
-Vcs-Git: https://github.com/furilabs/linux-@VARIANT@-@DEVICE_VENDOR@-@DEVICE_MODEL@.git
+Vcs-Browser: https://github.com/furilabs/linux-@DEVICE_VENDOR@-@DEVICE_MODEL@
+Vcs-Git: https://github.com/furilabs/linux-@DEVICE_VENDOR@-@DEVICE_MODEL@.git
 
 Package: linux-image-@KERNEL_BASE_VERSION@-@DEVICE_VENDOR@-@DEVICE_MODEL@
 Architecture: @DEB_BUILD_FOR@
