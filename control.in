@@ -25,7 +25,7 @@ Build-Depends: build-essential,
                avbtool,
                lz4,
                @DEB_TOOLCHAIN@
-Standards-Version: 4.5.0.3
+Standards-Version: 4.7.0
 Vcs-Browser: https://github.com/furilabs/linux-@DEVICE_VENDOR@-@DEVICE_MODEL@
 Vcs-Git: https://github.com/furilabs/linux-@DEVICE_VENDOR@-@DEVICE_MODEL@.git
 
