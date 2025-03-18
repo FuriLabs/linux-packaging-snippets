@@ -8,7 +8,7 @@ if [ "$1" != configure ]; then
     exit 0
 fi
 
-depmod "${KERNEL_RELEASE}"
+depmod "${KERNEL_RELEASE}" &> /dev/null
 
 if [ -d "/etc/kernel/bootimage_postinst.d" ]; then
 	DEB_MAINT_PARAMS="${*}" run-parts --report --exit-on-error --arg="${KERNEL_RELEASE}" /etc/kernel/bootimage_postinst.d
