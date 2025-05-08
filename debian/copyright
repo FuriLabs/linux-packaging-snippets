@@ -1,9 +1,10 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: linux-packaging-snippets
-Source: https://github.com/droidian/linux-packaging-snippets
+Source: https://github.com/furilabs/linux-packaging-snippets
 
 Files: *
 Copyright: 2020 Eugenio "g7" Paolantonio <me@medesimo.eu>
+           2025 Bardia Moshiri <bardia@furilabs.com>
 License: BSD-3-clause
 
 Files: extract_headers.sh
@@ -12,6 +13,7 @@ License: GPL-2
 
 Files: debian/*
 Copyright: 2020 Eugenio "g7" Paolantonio <me@medesimo.eu>
+           2025 Bardia Moshiri <bardia@furilabs.com>
 License: BSD-3-clause
 
 License: BSD-3-clause
